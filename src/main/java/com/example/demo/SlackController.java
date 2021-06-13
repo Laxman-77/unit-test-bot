@@ -32,4 +32,9 @@ public class SlackController {
         response.getAttachments().add(attachment);
         return response;
     }
+
+    @RequestMapping("/")
+    public SlackResponse home(){
+        return new SlackResponse("This is home page. ");
+    }
 }
