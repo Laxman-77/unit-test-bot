@@ -23,7 +23,7 @@ public class SlackController {
 
         System.out.println("teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName);
         SlackResponse response = new SlackResponse();
-        response.setText("This is the response text");
+        response.setText("This is the response text"+"\n Your text was "+text);
         response.setResponseType("in_channel");
 
         Attachment attachment = new Attachment();
