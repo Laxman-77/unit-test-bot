@@ -27,7 +27,7 @@ public class SlackController {
         response.setResponseType("in_channel");
 
         Attachment attachment = new Attachment();
-        attachment.setText("This is attachment text");
+        attachment.setText("This is attachment text\n"+ "teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName);
         attachment.setColor("#0000ff");
 
         response.getAttachments().add(attachment);
