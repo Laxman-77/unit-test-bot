@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SlackController {
-    @RequestMapping(value = "/slack/slash",
+    @RequestMapping(value = "/slack",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public SlackResponse onReceiveSlashCommand(@RequestParam("team_id") String teamId,
@@ -33,7 +33,7 @@ public class SlackController {
         return response;
     }
 
-    @RequestMapping("/slack")
+    //@RequestMapping("/slack")
     public SlackResponse slackPath(){
         SlackResponse response = new SlackResponse();
         response.setText("This is the response text");
