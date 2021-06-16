@@ -21,6 +21,7 @@ public class SlackController {
                                         @RequestParam("text") String text,
                                         @RequestParam("response_url") String responseUrl) {
 
+        System.out.println("teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName);
         SlackResponse response = new SlackResponse();
         response.setText("This is the response text");
         response.setResponseType("in_channel");
@@ -33,19 +34,6 @@ public class SlackController {
         return response;
     }
 
-    //@RequestMapping("/slack")
-    public SlackResponse slackPath(){
-        SlackResponse response = new SlackResponse();
-        response.setText("This is the response text");
-        response.setResponseType("in_channel");
-
-        Attachment attachment = new Attachment();
-        attachment.setText("This is attachment text");
-        attachment.setColor("#0000ff");
-
-        response.getAttachments().add(attachment);
-        return response;
-    }
 
     @RequestMapping("/")
     public SlackResponse home(){
