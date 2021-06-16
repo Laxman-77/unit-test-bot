@@ -22,9 +22,14 @@ public class SlackController {
                                         @RequestParam("response_url") String responseUrl) {
 
         System.out.println("teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName);
+        String[] numbers = text.split(" ");
+        int sum=0;
+        for(String s:numbers) sum+=Integer.parseInt(s);
+
         SlackResponse response = new SlackResponse();
-        response.setText("This is the response text"+"\n Your text was "+text);
+        response.setText("This is the response text"+"\n Your sum of numbers is "+sum);
         response.setResponseType("in_channel");
+
 
         Attachment attachment = new Attachment();
         attachment.setText("This is attachment text\n"+ "teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName);
