@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.io.*;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,9 @@ public class MyMapper {
     public HashMap<String,String> getAuthorMap() throws IOException {
         // Getting lineNumbers containing @Test in the given source file
         // Gives same performance as using the grep -n command
-        LineNumberReader rdr = new LineNumberReader(new FileReader(testDir+fileName));
+        InputStream in = new URL(testDir+fileName).openConnection().getInputStream();
+        LineNumberReader rdr = new LineNumberReader(new InputStreamReader(in) );
+        //LineNumberReader rdr = new LineNumberReader(new FileReader(testDir+fileName));
 
         String line;
         //noinspection TryFinallyCanBeTryWithResources

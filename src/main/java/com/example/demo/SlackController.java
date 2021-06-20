@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.URL;
 
 @RestController
 public class SlackController {
@@ -30,7 +31,8 @@ public class SlackController {
             response.setResponseType("in_channel");
 
             String fileName = "README.md";
-            String testDir = "https://github.com/Laxman-77/Test/blob/main/";
+            //URL dirURL = new URL("https://github.com/Laxman-77/Test/blob/main/");
+            String testDir = "https://github.com/Laxman-77/Test/blob/main";
 
             MyMapper mapper = new MyMapper(fileName, testDir);
             String myMap = mapper.getAuthorMap().toString();
