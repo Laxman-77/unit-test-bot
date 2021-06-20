@@ -32,8 +32,8 @@ public class SlackController {
         String fileName = "README.md";
         String testDir = "https://github.com/Laxman-77/Test/blob/main/";
 
-        //MyMapper mapper = new MyMapper(fileName,testDir);
-        String myMap ="map string";//mapper.getAuthorMap().toString();
+        MyMapper mapper = new MyMapper(fileName,testDir);
+        String myMap =mapper.getAuthorMap().toString();
 
         Attachment attachment = new Attachment();
         attachment.setText("This is attachment text\n"+ "teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName +"\n"+myMap);
