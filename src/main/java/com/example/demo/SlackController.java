@@ -22,25 +22,38 @@ public class SlackController {
                                         @RequestParam("command") String command,
                                         @RequestParam("text") String text,
                                         @RequestParam("response_url") String responseUrl) throws IOException {
+        try {
+            System.out.println("teamID : " + teamId + "\nuserId : " + userId + "\n teamName: " + channelName + "\n userName: " + userName);
 
-        System.out.println("teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName);
+            SlackResponse response = new SlackResponse();
+            response.setText("This is the response text");
+            response.setResponseType("in_channel");
 
-        SlackResponse response = new SlackResponse();
-        response.setText("This is the response text");
-        response.setResponseType("in_channel");
+            String fileName = "README.md";
+            String testDir = "https://github.com/Laxman-77/Test/blob/main/";
 
-        String fileName = "README.md";
-        String testDir = "https://github.com/Laxman-77/Test/blob/main/";
+            MyMapper mapper = new MyMapper(fileName, testDir);
+            String myMap = mapper.getAuthorMap().toString();
 
-        MyMapper mapper = new MyMapper(fileName,testDir);
-        String myMap =mapper.getAuthorMap().toString();
+            Attachment attachment = new Attachment();
+            attachment.setText("This is attachment text\n" + "teamID : " + teamId + "\nuserId : " + userId + "\n teamName: " + channelName + "\n userName: " + userName + "\n" + myMap);
+            attachment.setColor("#0000ff");
 
-        Attachment attachment = new Attachment();
-        attachment.setText("This is attachment text\n"+ "teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName +"\n"+myMap);
-        attachment.setColor("#0000ff");
+            response.getAttachments().add(attachment);
+            return response;
+        }
+        catch(Exception e){
+            SlackResponse response = new SlackResponse();
+            response.setText("Error Occurred In execution");
+            response.setResponseType("in_channel");
 
-        response.getAttachments().add(attachment);
-        return response;
+            Attachment attachment = new Attachment();
+            attachment.setColor("Error Attachment Text");
+            attachment.setColor("#0000ff");
+
+            response.getAttachments().add(attachment);
+            return response;
+        }
     }
 
 
