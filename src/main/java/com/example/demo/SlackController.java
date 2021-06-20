@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 public class SlackController {
     @RequestMapping(value = "/slack",
@@ -19,20 +21,22 @@ public class SlackController {
                                         @RequestParam("user_name") String userName,
                                         @RequestParam("command") String command,
                                         @RequestParam("text") String text,
-                                        @RequestParam("response_url") String responseUrl) {
+                                        @RequestParam("response_url") String responseUrl) throws IOException {
 
         System.out.println("teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName);
-        String[] numbers = text.split(" ");
-        int sum=0;
-        for(String s:numbers) sum+=Integer.parseInt(s);
 
         SlackResponse response = new SlackResponse();
-        response.setText("This is the response text"+"\n Your sum of numbers is "+sum);
+        response.setText("This is the response text");
         response.setResponseType("in_channel");
 
+        String fileName = "README.md";
+        String testDir = "https://github.com/Laxman-77/Test/blob/main/";
+
+        //MyMapper mapper = new MyMapper(fileName,testDir);
+        String myMap ="map string";//mapper.getAuthorMap().toString();
 
         Attachment attachment = new Attachment();
-        attachment.setText("This is attachment text\n"+ "teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName);
+        attachment.setText("This is attachment text\n"+ "teamID : "+teamId +"\nuserId : "+userId +"\n teamName: "+channelName+"\n userName: "+userName +"\n"+myMap);
         attachment.setColor("#0000ff");
 
         response.getAttachments().add(attachment);
