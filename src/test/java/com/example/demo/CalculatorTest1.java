@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CalculatorTest {
+public class CalculatorTest1 {
     @Autowired
     private Calculator calc;
 
@@ -29,6 +29,11 @@ public class CalculatorTest {
     @Test
     public void addTest2(){
         Assertions.assertNotEquals(7,calc.add(5,3));
+    }
+
+    @Test
+    public void subtractTest2(){
+        Assertions.assertEquals(13,calc.subtract(100,87));
     }
 
 }

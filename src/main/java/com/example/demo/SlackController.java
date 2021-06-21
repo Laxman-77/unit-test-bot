@@ -31,15 +31,23 @@ public class SlackController {
             response.setResponseType("in_channel");
 
             String fileName = "README.md";
-            //URL dirURL = new URL("https://github.com/Laxman-77/Test/blob/main/");
-            String testDir = "https://github.com/Laxman-77/Test/blob/main";
+            String testDir = "/Users/laxmangoliya/Test/";
 
+            //URL dirURL = new URL("https://github.com/Laxman-77/Test/blob/main/");
+            //String testDir = "https://github.com/Laxman-77/Test/blob/main";
+
+            System.out.println("Controller Starting");
             MyMapper mapper = new MyMapper(fileName, testDir);
             String myMap = mapper.getAuthorMap().toString();
 
             Attachment attachment = new Attachment();
-            attachment.setText("This is attachment text\n" + "teamID : " + teamId + "\nuserId : " + userId + "\n teamName: " + channelName + "\n userName: " + userName + "\n" + myMap);
+            attachment.setText("This is attachment text\n"+
+                    " teamID : " + teamId + "\n userId : " + userId
+                    + "\n teamName: " + channelName + "\n userName: "
+                    + userName + "\n");
+
             attachment.setColor("#0000ff");
+            attachment.setMap(myMap);
 
             response.getAttachments().add(attachment);
             return response;
@@ -53,6 +61,7 @@ public class SlackController {
             attachment.setColor("Error Attachment Text");
             attachment.setColor("#0000ff");
 
+            System.out.println("We are In Exception.");
             response.getAttachments().add(attachment);
             return response;
         }

@@ -20,57 +20,76 @@ public class MyMapper {
         authorMapByMethods = new HashMap<>();
     }
 
+
     public HashMap<String,String> getAuthorMap() throws IOException {
-        // Getting lineNumbers containing @Test in the given source file
-        // Gives same performance as using the grep -n command
-        InputStream in = new URL(testDir+fileName).openConnection().getInputStream();
-        LineNumberReader rdr = new LineNumberReader(new InputStreamReader(in) );
-        //LineNumberReader rdr = new LineNumberReader(new FileReader(testDir+fileName));
+        System.out.println("Entered in getAuthor method");
 
-        String line;
-        //noinspection TryFinallyCanBeTryWithResources
+        URL url = null;
+
         try {
-            while ((line = rdr.readLine()) != null) {
-                if (line.contains("@Test")) { // Current line contains the keyword
-                    line = rdr.readLine();
-                    int lineNumber = rdr.getLineNumber();
-                    String methodName = findMethodName(line);
+            //InputStream in = new URL("https://github.com/Laxman-77/SlackDemo/blob/master/src/test/java/com/example/demo/Demo1ApplicationTests.java").openConnection().getInputStream();
+            //LineNumberReader rdr = new LineNumberReader(new InputStreamReader(in));
 
-                    Process pr;
-                    // command for getting the authorMail of the line with specified lineNumber.
-                    String[] cmd = {"/bin/sh","-c","git blame -L "+lineNumber+",+1" +" --line-porcelain "+fileName+" | egrep -n \"author-mail\""};
-                    ProcessBuilder builder = new ProcessBuilder(cmd);
-                    builder = builder.directory(new File(testDir));
+            LineNumberReader rdr = new LineNumberReader(new FileReader(testDir+fileName));
 
-                    try {
-                        pr= builder.start();
-                        InputStream is = pr.getInputStream();
-                        BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+            String line;
+            //noinspection TryFinallyCanBeTryWithResources
+            try {
 
-                        String bufLine;
-                        try{
-                            while((bufLine = buf.readLine()) !=null){
-                                String[] temp = bufLine.split(" ");
-                                String authorMail = temp[1];
-                                String authorName = findUsernameFromMail(authorMail);
+                while ((line = rdr.readLine()) != null) {
 
-                                authorMapByMethods.put(methodName,authorName);
+                    System.out.println("line readed now : "+line);
+
+                    if (line.contains("@Test")) { // Current line contains the keyword
+                        line = rdr.readLine();
+                        System.out.println("## "+line);
+                        int lineNumber = rdr.getLineNumber();
+                        String methodName = findMethodName(line);
+
+                        Process pr;
+
+                        // command for getting the authorMail of the line with specified lineNumber.
+                        String[] cmd = {"/bin/sh", "-c", "git blame -L " + lineNumber + ",+1" + " --line-porcelain " + fileName + " | egrep -n \"author-mail\""};
+                        ProcessBuilder builder = new ProcessBuilder(cmd);
+                        builder = builder.directory(new File(testDir));
+
+                        try {
+                            System.out.println("Entered in TRY 3 !");
+                            pr = builder.start();
+                            InputStream is = pr.getInputStream();
+                            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+
+                            String bufLine;
+                            try {
+                                while ((bufLine = buf.readLine()) != null) {
+                                    String[] temp = bufLine.split(" ");
+                                    String authorMail = temp[1];
+                                    String authorName = findUsernameFromMail(authorMail);
+
+                                    authorMapByMethods.put(methodName, authorName);
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Exception in while loop");
                             }
+                        } catch (Exception e) {
+                            System.out.println("Exception in buffered reader");
+                            e.printStackTrace();
                         }
-                        catch (Exception e){
-                            System.out.println("Exception in while loop");
-                        }
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
                     }
                 }
             }
-        } finally {
-            rdr.close();
+            catch (Exception e){
+                System.out.println("Error in line reader");
+            }
+            finally {
+                rdr.close();
+            }
+
         }
-
-
+        catch (Exception e){
+            System.out.println("Exception in file reading");
+            e.printStackTrace();
+        }
         for(Map.Entry entry:authorMapByMethods.entrySet()){
             System.out.println(entry.getKey() +" : "+entry.getValue());
         }

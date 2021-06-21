@@ -16,6 +16,9 @@ public class Attachment {
     @JsonProperty("text")
     private String text;
 
+    @JsonProperty("map")
+    private String map;
+
     public Attachment() {
     }
 
@@ -33,5 +36,13 @@ public class Attachment {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getMap() {
+        return map;
+    }
+
+    public void setMap(String map) {
+        this.map = map;
     }
 }
