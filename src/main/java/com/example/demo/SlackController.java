@@ -34,7 +34,7 @@ public class SlackController {
             response.setResponseType("in_channel");
 
             TestRunner testRunner = new TestRunner();
-            HashMap<String,String > authorMap = testRunner.getAuthorMap();
+            //HashMap<String,String > authorMap = testRunner.getAuthorMap();
 
             /*
             String map = "";

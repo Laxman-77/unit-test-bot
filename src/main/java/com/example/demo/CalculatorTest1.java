@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Configuration
 @RunWith(SpringJUnit4ClassRunner.class)
 public class CalculatorTest1 {
     @Autowired

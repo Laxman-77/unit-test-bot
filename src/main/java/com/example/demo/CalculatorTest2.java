@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @SpringBootTest
-@Configuration
 @RunWith(SpringJUnit4ClassRunner.class)
 public class CalculatorTest2 {
     @Autowired
