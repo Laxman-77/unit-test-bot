@@ -126,7 +126,7 @@ public class TestRunner {
             e.printStackTrace();
         }
         if(line == null) System.out.println("Git blame error");
-        line = "No line readed";
+        line = "No_line_readed_for_git_blame";
         return line;
     }
 
