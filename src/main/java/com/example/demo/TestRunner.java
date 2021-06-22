@@ -82,18 +82,16 @@ public class TestRunner {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
-                for (Method method : className.getMethods()) {
-                    // System.out.println(method.getName());
-                }
             }
         }
 
-        /*
+
         System.out.println("---------------------------AuthorMap-----------------------------");
         for(Map.Entry entry:authorMap.entrySet()){
             System.out.println(entry.getKey() +" | "+ entry.getValue());
         }
         System.out.println("------------------------------------------------------------------");
+        /*
         for(Failure failure:result.getFailures()){
             System.out.println(failure.toString());
         }

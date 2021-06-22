@@ -33,6 +33,7 @@ public class SlackController {
             response.setText("This is the response text");
             response.setResponseType("in_channel");
 
+            System.out.println("Starting Controller");
             TestRunner testRunner = new TestRunner();
             HashMap<String,String > authorMap = testRunner.getAuthorMap();
 
@@ -44,6 +45,7 @@ public class SlackController {
             }
             map+="-------------------------------------------------";
 
+            System.out.println(map);
 
             Attachment attachment = new Attachment();
             attachment.setText("This is attachment text\n"+
