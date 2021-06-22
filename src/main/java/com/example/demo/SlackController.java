@@ -49,7 +49,7 @@ public class SlackController {
             attachment.setText("This is attachment text\n"+
                     " teamID : " + teamId + "\n userId : " + userId
                     + "\n teamName: " + channelName + "\n userName: "
-                    + userName + "\n" );
+                    + userName + "\n" + "AuthorMapSize: "+ authorMap.entrySet().size());
 
             attachment.setColor("#0000ff");
             //attachment.setMap(authorMap);
