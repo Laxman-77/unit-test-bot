@@ -36,14 +36,14 @@ public class SlackController {
             TestRunner testRunner = new TestRunner();
             HashMap<String,String > authorMap = testRunner.getAuthorMap();
 
-            /*
+
             String map = "";
             map+="---------------------AuthorMap-------------------\n";
             for(Map.Entry entry:authorMap.entrySet()){
                 map+=entry.getKey().toString()+" | "+entry.getValue().toString()+ "\n";
             }
             map+="-------------------------------------------------";
-            */
+
 
             Attachment attachment = new Attachment();
             attachment.setText("This is attachment text\n"+
@@ -57,7 +57,7 @@ public class SlackController {
             response.getAttachments().add(attachment);
 
             Attachment attachment1 = new Attachment();
-            attachment1.setText("This is AuthorMap attachment text.\n");
+            attachment1.setText("This is AuthorMap attachment text.\n"+map);
             attachment1.setColor("#0EF0CA");
 
             response.getAttachments().add(attachment1);
