@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class SlackController {
@@ -35,6 +36,12 @@ public class SlackController {
             TestRunner testRunner = new TestRunner();
             HashMap<String,String > authorMap = testRunner.getAuthorMap();
 
+            String map = "";
+            map+="---------------------AuthorMap-------------------";
+            for(Map.Entry entry:authorMap.entrySet()){
+                map+=entry.getKey().toString()+" | "+entry.getValue().toString();
+            }
+            map+="-------------------------------------------------";
 
             Attachment attachment = new Attachment();
             attachment.setText("This is attachment text\n"+
@@ -43,9 +50,15 @@ public class SlackController {
                     + userName + "\n");
 
             attachment.setColor("#0000ff");
-            attachment.setMap(authorMap);
+            //attachment.setMap(authorMap);
 
             response.getAttachments().add(attachment);
+
+            Attachment attachment1 = new Attachment();
+            attachment1.setText(map);
+            attachment1.setColor("#0EF0CA");
+
+            response.getAttachments().add(attachment1);
             return response;
         }
         catch(Exception e){
