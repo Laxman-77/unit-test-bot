@@ -1,5 +1,6 @@
 package com.example.demo;
 
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 
 @RestController
 public class SlackController {
@@ -30,15 +32,9 @@ public class SlackController {
             response.setText("This is the response text");
             response.setResponseType("in_channel");
 
-            String fileName = "README.md";
-            String testDir = "/Users/laxmangoliya/Test/";
+            TestRunner testRunner = new TestRunner();
+            HashMap<String,String > authorMap = testRunner.getAuthorMap();
 
-            //URL dirURL = new URL("https://github.com/Laxman-77/Test/blob/main/");
-            //String testDir = "https://github.com/Laxman-77/Test/blob/main";
-
-            System.out.println("Controller Starting");
-            MyMapper mapper = new MyMapper(fileName, testDir);
-            String myMap = mapper.getAuthorMap().toString();
 
             Attachment attachment = new Attachment();
             attachment.setText("This is attachment text\n"+
@@ -47,7 +43,7 @@ public class SlackController {
                     + userName + "\n");
 
             attachment.setColor("#0000ff");
-            attachment.setMap(myMap);
+            attachment.setMap(authorMap);
 
             response.getAttachments().add(attachment);
             return response;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,7 +18,7 @@ public class Attachment {
     private String text;
 
     @JsonProperty("map")
-    private String map;
+    private HashMap<String ,String > map;
 
     public Attachment() {
     }
@@ -38,11 +39,11 @@ public class Attachment {
         this.text = text;
     }
 
-    public String getMap() {
+    public HashMap<String, String> getMap() {
         return map;
     }
 
-    public void setMap(String map) {
+    public void setMap(HashMap<String, String> map) {
         this.map = map;
     }
 }

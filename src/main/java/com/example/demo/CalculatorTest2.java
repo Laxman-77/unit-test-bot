@@ -5,14 +5,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
+@Configuration
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CalculatorTest1 {
+public class CalculatorTest2 {
     @Autowired
     private Calculator calc;
 
@@ -35,5 +34,4 @@ public class CalculatorTest1 {
     public void subtractTest2(){
         Assertions.assertEquals(13,calc.subtract(100,87));
     }
-
 }
