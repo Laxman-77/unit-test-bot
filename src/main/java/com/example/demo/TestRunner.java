@@ -52,14 +52,14 @@ public class TestRunner {
                     BufferedReader buf = new BufferedReader(new FileReader(fileName));
                     LineNumberReader rdr = new LineNumberReader(buf);
 
-                    //System.out.println(buf.toString());
+                    System.out.println(buf.toString());
                     try {
                         String line;
                         while ((line = rdr.readLine()) != null) {
                             //System.out.println(line);
                             if (line.contains("@Test")) {
                                 line = rdr.readLine();
-                                //System.out.println(line);
+                                System.out.println(line);
                                 String authorMailString = findGitBlameForLine(fileName, rdr.getLineNumber());
                                 //System.out.println(authorMailString);
 
