@@ -125,7 +125,8 @@ public class TestRunner {
         catch (IOException e){
             e.printStackTrace();
         }
-        if(line.equalsIgnoreCase("NIL")) System.out.println("Git blame error");
+        if(line == null) System.out.println("Git blame error");
+        line = "No line readed";
         return line;
     }
 
