@@ -61,8 +61,9 @@ public class TestRunner {
                                 line = rdr.readLine();
                                 System.out.println("# "+line);
                                 String authorMailString = findGitBlameForLine(fileName, rdr.getLineNumber());
-                                //System.out.println(authorMailString);
+                                System.out.println(authorMailString);
 
+                                if(!(authorMailString.contains("@"))) System.out.println("# Not Committed yet");
                                 String authorName = getAuthorMailFromGitBlame(authorMailString);
                                 String methodName = getMethodName(line);
                                 authorMap.put(className.getName() + ". " + methodName, authorName); // ". " added explicitly
@@ -110,10 +111,11 @@ public class TestRunner {
         };
 
         Process pr;
-        String line = "No line readed.";
+        String line = "NIL";
         try {
             pr = Runtime.getRuntime().exec(blameCmd);
             BufferedReader buf  = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+
             while((line = buf.readLine())!=null){
                 //System.out.println(line);
                 break;
@@ -123,6 +125,7 @@ public class TestRunner {
         catch (IOException e){
             e.printStackTrace();
         }
+        if(line.equalsIgnoreCase("NIL")) System.out.println("Git blame error");
         return line;
     }
 
