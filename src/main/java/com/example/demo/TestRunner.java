@@ -59,7 +59,7 @@ public class TestRunner {
                             //System.out.println(line);
                             if (line.contains("@Test")) {
                                 line = rdr.readLine();
-                                System.out.println(line);
+                                System.out.println("# "+line);
                                 String authorMailString = findGitBlameForLine(fileName, rdr.getLineNumber());
                                 //System.out.println(authorMailString);
 
@@ -67,6 +67,7 @@ public class TestRunner {
                                 String methodName = getMethodName(line);
                                 authorMap.put(className.getName() + ". " + methodName, authorName); // ". " added explicitly
 
+                                System.out.println(authorName+"\n"+methodName);
                                 //Mapping testname (MongoPersistentPropertyCacheTest. testMongoPersistentPropertyCache_index_created)
                                 // to AuthorName.
                             }
@@ -74,7 +75,7 @@ public class TestRunner {
                     } catch (Exception ee) {
                         ee.printStackTrace();
                     } finally {
-                        //System.out.println("gone");
+                        System.out.println("gone");
                         buf.close();
                         rdr.close();
                     }
@@ -135,7 +136,7 @@ public class TestRunner {
             builder1.delete(builder1.indexOf("@"),builder1.length());
             builder1.delete(0,builder1.indexOf("<")+1);
         }
-        //System.out.println(builder1.toString());
+        System.out.println("## "+builder1.toString());
         return builder1.toString();
     }
     public static String getMethodName(String line){
