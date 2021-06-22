@@ -56,11 +56,11 @@ public class SlackController {
 
             response.getAttachments().add(attachment);
 
-            //Attachment attachment1 = new Attachment();
-            //attachment1.setText("This is AuthorMap attachment text.\n"+map);
-            //attachment1.setColor("#0EF0CA");
+            Attachment attachment1 = new Attachment();
+            attachment1.setText("This is AuthorMap attachment text.\n");
+            attachment1.setColor("#0EF0CA");
 
-            //response.getAttachments().add(attachment1);
+            response.getAttachments().add(attachment1);
             return response;
         }
         catch(Exception e){
