@@ -30,7 +30,7 @@ public class SlackController {
             System.out.println("teamID : " + teamId + "\nuserId : " + userId + "\n teamName: " + channelName + "\n userName: " + userName);
 
             SlackResponse response = new SlackResponse();
-            response.setText("This is the response text");
+            //response.setText("This is the response text");
             response.setResponseType("in_channel");
 
             System.out.println("Starting Controller");
@@ -46,7 +46,7 @@ public class SlackController {
             map+="-------------------------------------------------";
 
             System.out.println(map);
-
+            response.setText(map);
             Attachment attachment = new Attachment();
             attachment.setText("This is attachment text\n"+
                     " teamID : " + teamId + "\n userId : " + userId
