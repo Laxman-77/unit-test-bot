@@ -88,6 +88,7 @@ public class TestRunner {
             }
         }
 
+        /*
         System.out.println("---------------------------AuthorMap-----------------------------");
         for(Map.Entry entry:authorMap.entrySet()){
             System.out.println(entry.getKey() +" | "+ entry.getValue());
@@ -98,7 +99,7 @@ public class TestRunner {
         }
 
         System.out.println(result.wasSuccessful());
-
+        */
         return authorMap;
     }
 
