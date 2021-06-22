@@ -37,9 +37,9 @@ public class SlackController {
             HashMap<String,String > authorMap = testRunner.getAuthorMap();
 
             String map = "";
-            map+="---------------------AuthorMap-------------------";
+            map+="---------------------AuthorMap-------------------\n";
             for(Map.Entry entry:authorMap.entrySet()){
-                map+=entry.getKey().toString()+" | "+entry.getValue().toString();
+                map+=entry.getKey().toString()+" | "+entry.getValue().toString()+ "\n";
             }
             map+="-------------------------------------------------";
 
@@ -47,7 +47,7 @@ public class SlackController {
             attachment.setText("This is attachment text\n"+
                     " teamID : " + teamId + "\n userId : " + userId
                     + "\n teamName: " + channelName + "\n userName: "
-                    + userName + "\n");
+                    + userName + "\n" +"AuthorMapSize :"+authorMap.entrySet().size()+"\n");
 
             attachment.setColor("#0000ff");
             //attachment.setMap(authorMap);
@@ -55,7 +55,7 @@ public class SlackController {
             response.getAttachments().add(attachment);
 
             Attachment attachment1 = new Attachment();
-            attachment1.setText(map);
+            attachment1.setText("This is AuthorMap attachment text.\n"+map);
             attachment1.setColor("#0EF0CA");
 
             response.getAttachments().add(attachment1);
