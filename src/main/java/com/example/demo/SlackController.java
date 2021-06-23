@@ -40,7 +40,8 @@ public class SlackController {
             Attachment attachment = new Attachment();
             attachment.setText(mapTable);
             attachment.setColor("#0000ff");
-            response.getAttachments().add(attachment);
+            //response.getAttachments().add(attachment);
+            response.setText(mapTable);
             return response;
         }
         catch(Exception e){
