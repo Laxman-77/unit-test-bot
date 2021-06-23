@@ -21,7 +21,7 @@ public class TestRunner {
     public static final String PADDING = " ";
     public static final String VERTICAL_SEPARATOR = "|";
     public static final String HORIZONTAL_SEPARATOR = "-";
-    public static final String NEWLINE_SEPARATOR = "%n";
+    public static final String NEWLINE_SEPARATOR = "\n";
     public static final String INTERSECTION_CHAR = "+";
     public static HashMap<String,String> authorMap;
 
