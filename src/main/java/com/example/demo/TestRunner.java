@@ -161,9 +161,11 @@ public class TestRunner {
             +--------------------------+-------------------+
          */
 
+        maxAuthorNameLength += 15;
+        maxTestNameLength += 15;
         StringBuilder horizontal = new StringBuilder(); // +----------------+------------+
-        horizontal.append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxTestNameLength+15+1)).
-                append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxAuthorNameLength+15+1)).append(INTERSECTION_CHAR);
+        horizontal.append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxTestNameLength+1)).
+                append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxAuthorNameLength+1)).append(INTERSECTION_CHAR);
         //System.out.println(horizontal);
 
         String[] headings = {"Test Name", "Author Name"};
@@ -188,8 +190,8 @@ public class TestRunner {
     private static StringBuilder getPaddedEntry(String[] headings,Integer maxTestNameLength,Integer maxAuthorNameLength)
     {
         StringBuilder heading = new StringBuilder();
-        heading.append(VERTICAL_SEPARATOR).append(PADDING).append(headings[0]).append(StringUtils.repeat(PADDING,maxTestNameLength-headings[0].length()+15))
-                .append(VERTICAL_SEPARATOR).append(PADDING).append(headings[1]).append(StringUtils.repeat(PADDING,maxAuthorNameLength-headings[1].length()+15))
+        heading.append(VERTICAL_SEPARATOR).append(PADDING).append(headings[0]).append(StringUtils.repeat(PADDING,maxTestNameLength-headings[0].length()))
+                .append(VERTICAL_SEPARATOR).append(PADDING).append(headings[1]).append(StringUtils.repeat(PADDING,maxAuthorNameLength-headings[1].length()))
                 .append(VERTICAL_SEPARATOR);
         return heading;
     }
