@@ -38,7 +38,7 @@ public class SlackController {
             String mapTable = TestRunner.getAuthorMap();
             System.out.println(mapTable);
             Attachment attachment = new Attachment();
-            attachment.setText(mapTable);
+            attachment.setText("'''"+mapTable+"'''");
             attachment.setColor("#0000ff");
             //response.getAttachments().add(attachment);
             response.setText(mapTable);
