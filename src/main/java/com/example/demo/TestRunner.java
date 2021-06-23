@@ -18,12 +18,12 @@ public class TestRunner {
     private static final String testDir = "src/main/";
     private static final String FILE_PREFIX = testDir+"/java/";
 
-    public static final String PADDING = " ";
-    public static final String VERTICAL_SEPARATOR = "|";
-    public static final String HORIZONTAL_SEPARATOR = "-";
-    public static final String NEWLINE_SEPARATOR = "\n";
-    public static final String INTERSECTION_CHAR = "+";
-    public static HashMap<String,String> authorMap;
+    private static final String PADDING = " ";
+    private static final String VERTICAL_SEPARATOR = "|";
+    private static final String HORIZONTAL_SEPARATOR = "-";
+    private static final String NEWLINE_SEPARATOR = "\n";
+    private static final String INTERSECTION_CHAR = "+";
+    private static HashMap<String,String> authorMap;
 
     public static String getAuthorMap() throws ClassNotFoundException, IOException {
         Class currentClass = new Object(){}.getClass().getEnclosingClass(); // TestRunner.class
