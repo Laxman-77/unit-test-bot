@@ -1,23 +1,13 @@
 package com.example.demo;
 
-import org.assertj.core.util.Lists;
-import org.junit.Test;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
 import org.junit.runner.RunWith;
-import org.junit.runner.notification.Failure;
 import org.junit.runners.Suite;
-import org.springframework.util.StreamUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.io.*;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-
-import static org.apache.commons.lang3.StringUtils.removeEnd;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -28,26 +18,15 @@ public class TestRunner {
     private static final String testDir = "src/main/";
     private static final String FILE_PREFIX = testDir+"/java/";
 
-    public static final String FIRST_HEADING = "Test Name ";
-    public static final String TOTAL = "Total";
-    public static final String TEST_SUITE_SUFFIX = "TestSuite";
-    public static final String EMAIL_SUFFIX = "@sprinklr.com>";
-    public static final String EMAIL_PREFIX = "<";
-
-    public static final String NEWLINE_SEPARATOR = "%n";
     public static final String PADDING = " ";
     public static final String VERTICAL_SEPARATOR = "|";
     public static final String HORIZONTAL_SEPARATOR = "-";
+    public static final String NEWLINE_SEPARATOR = "%n";
     public static final String INTERSECTION_CHAR = "+";
     public static HashMap<String,String> authorMap;
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        getAuthorMap();
-        printAuthorMap();
-    }
-    public static HashMap<String,String> getAuthorMap() throws ClassNotFoundException, IOException {
+    public static String getAuthorMap() throws ClassNotFoundException, IOException {
         Class currentClass = new Object(){}.getClass().getEnclosingClass(); // TestRunner.class
-
         //Result result = JUnitCore.runClasses(currentClass);
 
         authorMap = new HashMap<>(); // map for @Test method() --> AuthorName
@@ -64,18 +43,16 @@ public class TestRunner {
             Suite.SuiteClasses suiteClasses = Class.forName(testSuite).getAnnotation(Suite.SuiteClasses.class);
 
             Class<?>[] classesInSuite = suiteClasses.value();
-            //System.out.println(classesInSuite.length);
+
             for (Class className : classesInSuite) {
-                //System.out.println(className.getName());
+
                 String fileName = FILE_PREFIX + className.getName().replace(".", "/") + ".java";
                 // fileName = src/main/java/com/example/demo/xyz.java
 
                 try {
-                    //System.out.println(is.toString());
                     BufferedReader buf = new BufferedReader(new FileReader(fileName));
                     LineNumberReader rdr = new LineNumberReader(buf);
 
-                    //System.out.println(buf.toString());
 
                     try {
                         String line;
@@ -99,7 +76,6 @@ public class TestRunner {
                         ee.printStackTrace();
                     }
                     finally {
-                        //System.out.println("gone");
                         buf.close();
                         rdr.close();
                     }
@@ -110,24 +86,15 @@ public class TestRunner {
             }
         }
 
-        printAuthorMap();
-        /*
-        System.out.println("---------------------------AuthorMap-----------------------------");
-        for(Map.Entry entry:authorMap.entrySet()){
-            System.out.println(entry.getKey() +" | "+ entry.getValue());
+        List<String> list = printAuthorMap();
+        StringBuilder table = new StringBuilder();
+        for( String entry: list){
+            table.append(entry).append(NEWLINE_SEPARATOR);
         }
-        System.out.println("------------------------------------------------------------------");
-        /*
-        for(Failure failure:result.getFailures()){
-            System.out.println(failure.toString());
-        }
-
-        System.out.println(result.wasSuccessful());
-        */
-        return authorMap;
+        return table.toString();
     }
 
-    public static String findGitBlameForLine(String fileName,int lineNumber) throws IOException {
+    private static String findGitBlameForLine(String fileName,int lineNumber) throws IOException {
         String[] blameCmd = {
                 "/bin/sh",
                 "-c",
@@ -141,7 +108,6 @@ public class TestRunner {
             BufferedReader buf  = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 
             while((line = buf.readLine())!=null){  // reading the result of git blame command
-                //System.out.println(line);
                 break;
             }
             buf.close();
@@ -149,12 +115,11 @@ public class TestRunner {
         catch (IOException e){
             e.printStackTrace();
         }
-        if(line == null) System.out.println("Git blame error");
-        line = "noLineReadedFromGitBlame";
+        if(line == null) line = "No_Line_Readed";
         return line;
     }
 
-    public static String getAuthorMailFromGitBlame(String line){
+    private static String getAuthorMailFromGitBlame(String line){
         String[] temp = line.split(" ");
         line = temp[temp.length-1];
 
@@ -166,7 +131,7 @@ public class TestRunner {
         //System.out.println("## "+builder1.toString());
         return builder1.toString();
     }
-    public static String getMethodName(String line){
+    private static String getMethodName(String line){
         // line is a method definition line ex. public String fun1(){
         // remove line after (
         StringBuilder builder = new StringBuilder(line);
@@ -177,7 +142,7 @@ public class TestRunner {
         return tmp[tmp.length-1];
     }
 
-    public static void printAuthorMap(){
+    private static List<String> printAuthorMap(){
         int maxAuthorNameLength = 0;
         int maxTestNameLength = 0;
 
@@ -186,7 +151,17 @@ public class TestRunner {
             maxTestNameLength = Math.max(maxTestNameLength,entry.getKey().toString().length());
         }
 
-        StringBuilder horizontal = new StringBuilder();
+        /*
+            Table Format:
+            +--------------------------+-------------------+
+            | Test Name                | Author Name       |
+            +--------------------------+-------------------+
+            | class1.testMethod1       | goliyalaxman00    |
+            | class1.testMethod2       | abhinav.bollam    |
+            +--------------------------+-------------------+
+         */
+
+        StringBuilder horizontal = new StringBuilder(); // +----------------+------------+
         horizontal.append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxTestNameLength+2)).
                 append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxAuthorNameLength+2)).append(INTERSECTION_CHAR);
         //System.out.println(horizontal);
@@ -194,20 +169,23 @@ public class TestRunner {
         String[] headings = {"Test Name", "Author Name"};
         StringBuilder headers = getPaddedEntry(headings,maxTestNameLength,maxAuthorNameLength);
 
+        List<String> mapTable = new ArrayList<>();
+        mapTable.add(horizontal.toString());
+        mapTable.add(headers.toString());
+        mapTable.add(horizontal.toString());
 
-        System.out.println(horizontal);
-        System.out.println(headers);
-        System.out.println(horizontal);
         for(Map.Entry entry: authorMap.entrySet()){
             String[] entries = {entry.getKey().toString(),entry.getValue().toString()};
             StringBuilder padded = getPaddedEntry(entries,maxTestNameLength,maxAuthorNameLength);
-            System.out.println(padded);
-            System.out.println(horizontal);
+            mapTable.add(padded.toString());
         }
-        //System.out.println(horizontal);
+
+        mapTable.add(horizontal.toString());
+
+        return mapTable;
     }
 
-    public static StringBuilder getPaddedEntry(String[] headings,Integer maxTestNameLength,Integer maxAuthorNameLength)
+    private static StringBuilder getPaddedEntry(String[] headings,Integer maxTestNameLength,Integer maxAuthorNameLength)
     {
         StringBuilder heading = new StringBuilder();
         heading.append(VERTICAL_SEPARATOR).append(PADDING).append(headings[0]).append(StringUtils.repeat(PADDING,maxTestNameLength-headings[0].length()+1))

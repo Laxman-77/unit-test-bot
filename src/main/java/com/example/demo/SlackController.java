@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,42 +28,18 @@ public class SlackController {
                                         @RequestParam("text") String text,
                                         @RequestParam("response_url") String responseUrl) throws IOException {
         try {
-            System.out.println("teamID : " + teamId + "\nuserId : " + userId + "\n teamName: " + channelName + "\n userName: " + userName);
+            //System.out.println("teamID : " + teamId + "\nuserId : " + userId + "\n teamName: " + channelName + "\n userName: " + userName);
 
             SlackResponse response = new SlackResponse();
-            //response.setText("This is the response text");
+            response.setText("Unit Testing Author-Test Map");
             response.setResponseType("in_channel");
 
-            System.out.println("Starting Controller");
-            TestRunner testRunner = new TestRunner();
-            HashMap<String,String > authorMap = testRunner.getAuthorMap();
 
-
-            String map = "";
-            map+="---------------------AuthorMap-------------------\n";
-            for(Map.Entry entry:authorMap.entrySet()){
-                map+=entry.getKey().toString()+" | "+entry.getValue().toString()+ "\n";
-            }
-            map+="-------------------------------------------------";
-
-            System.out.println(map);
-            response.setText(map);
+            String mapTable = TestRunner.getAuthorMap();
             Attachment attachment = new Attachment();
-            attachment.setText("This is attachment text\n"+
-                    " teamID : " + teamId + "\n userId : " + userId
-                    + "\n teamName: " + channelName + "\n userName: "
-                    + userName + "\n" + "AuthorMapSize: "+ authorMap.entrySet().size());
-
+            attachment.setText(mapTable);
             attachment.setColor("#0000ff");
-            //attachment.setMap(authorMap);
-
             response.getAttachments().add(attachment);
-
-            Attachment attachment1 = new Attachment();
-            attachment1.setText("This is AuthorMap attachment text.\n"+map);
-            attachment1.setColor("#0EF0CA");
-
-            response.getAttachments().add(attachment1);
             return response;
         }
         catch(Exception e){
