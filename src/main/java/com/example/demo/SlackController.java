@@ -31,16 +31,17 @@ public class SlackController {
             //System.out.println("teamID : " + teamId + "\nuserId : " + userId + "\n teamName: " + channelName + "\n userName: " + userName);
 
             SlackResponse response = new SlackResponse();
-            response.setText("Unit Testing Author-Test Map");
+            //response.setText("Unit Testing Author-Test Map");
             response.setResponseType("in_channel");
 
 
             String mapTable = TestRunner.getAuthorMap();
+            response.setText("```" + "Unit Testing Test Author Map\n" + mapTable + "\n ```");
             System.out.println(mapTable);
             Attachment attachment = new Attachment();
             attachment.setText("```"+mapTable+"```");
             attachment.setColor("#0000ff");
-            response.getAttachments().add(attachment);
+            //response.getAttachments().add(attachment);
             return response;
         }
         catch(Exception e){
