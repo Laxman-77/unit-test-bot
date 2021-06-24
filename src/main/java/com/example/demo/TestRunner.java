@@ -14,6 +14,12 @@ import java.util.Map;
         CalculatorTestSuite1.class,
         CalculatorTestSuite2.class
 })
+
+/**
+ * @author laxman.goliya
+ * @date 25/06/2021
+ */
+
 public class TestRunner {
     private static final String testDir = "src/main/";
     private static final String FILE_PREFIX = testDir+"/java/";
@@ -161,8 +167,8 @@ public class TestRunner {
             +--------------------------+-------------------+
          */
 
-        maxAuthorNameLength += 15;
-        maxTestNameLength += 15;
+        maxAuthorNameLength += 2;
+        maxTestNameLength += 2;
         StringBuilder horizontal = new StringBuilder(); // +----------------+------------+
         horizontal.append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxTestNameLength+1)).
                 append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxAuthorNameLength+1)).append(INTERSECTION_CHAR);
