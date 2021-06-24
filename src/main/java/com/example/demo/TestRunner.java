@@ -9,17 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        CalculatorTestSuite1.class,
-        CalculatorTestSuite2.class
-})
 
 /**
  * @author laxman.goliya
  * @date 25/06/2021
  */
 
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        CalculatorTestSuite1.class,
+        CalculatorTestSuite2.class
+})
 public class TestRunner {
     private static final String testDir = "src/main/";
     private static final String FILE_PREFIX = testDir+"/java/";
@@ -92,6 +92,7 @@ public class TestRunner {
             }
         }
 
+        // converting authorMap to string in table format
         List<String> list = printAuthorMap();
         StringBuilder table = new StringBuilder();
         for( String entry: list){
@@ -121,21 +122,21 @@ public class TestRunner {
         catch (IOException e){
             e.printStackTrace();
         }
-        if(line == null) line = "No_Line_Readed";
+        if(line == null) line = "No_Line_Readed"; // if no line readed from git blame,then line == null
         return line;
     }
 
     private static String getAuthorMailFromGitBlame(String line){
-        String[] temp = line.split(" ");
-        line = temp[temp.length-1];
+        // line as "author_mail <laxman.goliya@sprinklr.com>"
+        // we have to extract laxman.goliya from it.
 
         StringBuilder builder1 = new StringBuilder(line);
         if(builder1.indexOf("@") != -1) {
-            builder1.delete(builder1.indexOf("@"),builder1.length());
-            builder1.delete(0,builder1.indexOf("<")+1);
+            builder1.delete(builder1.indexOf("@"),builder1.length()); // remove after @
+            builder1.delete(0,builder1.indexOf("<")+1); // remove before <
         }
-        //System.out.println("## "+builder1.toString());
-        return builder1.toString();
+
+        return builder1.toString(); // laxman.goliya
     }
     private static String getMethodName(String line){
         // line is a method definition line ex. public String fun1(){
@@ -144,8 +145,8 @@ public class TestRunner {
         builder.delete(builder.indexOf("("),line.length());
         line = builder.toString();
 
-        String[] tmp = line.split(" ");
-        return tmp[tmp.length-1];
+        String[] tmp = line.split(" "); // tmp = {"public","String","fun1"}
+        return tmp[tmp.length-1]; // fun1
     }
 
     private static List<String> printAuthorMap(){
@@ -167,7 +168,7 @@ public class TestRunner {
             +--------------------------+-------------------+
          */
 
-        maxAuthorNameLength += 2;
+        maxAuthorNameLength += 2; // for extra padding
         maxTestNameLength += 2;
         StringBuilder horizontal = new StringBuilder(); // +----------------+------------+
         horizontal.append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxTestNameLength+1)).
