@@ -11,3 +11,4 @@ import org.junit.runners.Suite;
 })
 public class CalculatorTestSuite2 {
 }
+

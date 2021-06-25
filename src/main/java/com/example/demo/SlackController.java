@@ -26,35 +26,30 @@ public class SlackController {
                                         @RequestParam("user_name") String userName,
                                         @RequestParam("command") String command,
                                         @RequestParam("text") String text,
-                                        @RequestParam("response_url") String responseUrl) throws IOException {
+                                        @RequestParam("token") String token,
+                                        @RequestParam("response_url") String responseUrl) throws IOException, ClassNotFoundException
+    {
+
         try {
-            //System.out.println("teamID : " + teamId + "\nuserId : " + userId + "\n teamName: " + channelName + "\n userName: " + userName);
-
             SlackResponse response = new SlackResponse();
-            //response.setText("Unit Testing Author-Test Map");
-            response.setResponseType("in_channel");
 
+            response.setResponseType("in_channel");
 
             String mapTable = TestRunner.getAuthorMap();
-            response.setText("```" + "Unit Testing Test Author Map\n" + mapTable + "\n ```");
+            //response.setText("```" + "Unit Testing Test Author Map\n" + mapTable + " ```");
             System.out.println(mapTable);
-            //Attachment attachment = new Attachment();
-            //attachment.setText("```"+mapTable+"```");
-            //attachment.setColor("#0000ff");
-            //response.getAttachments().add(attachment);
+
+            StringBuilder res = new StringBuilder();
+            res.append("teamId :").append(teamId).append("\ntoken: ").append(token).append("channel : ")
+                    .append(channelName);
+            response.setText(res.toString());
             return response;
         }
-        catch(Exception e){
+        catch(IOException e){
             SlackResponse response = new SlackResponse();
-            response.setText("Error Occurred In execution");
-            response.setResponseType("in_channel");
+            response.setResponseType("ephemeral");
+            response.setText("Error occurred in execution");
 
-            Attachment attachment = new Attachment();
-            attachment.setColor("Error Attachment Text");
-            attachment.setColor("#0000ff");
-
-            System.out.println("We are In Exception.");
-            response.getAttachments().add(attachment);
             return response;
         }
     }
