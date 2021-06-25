@@ -18,7 +18,16 @@ public class SlackController {
     @RequestMapping(value = "/slack",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public SlackResponse onReceiveSlashCommand() throws IOException, ClassNotFoundException
+    public SlackResponse onReceiveSlashCommand(@RequestParam("team_id") String teamId,
+                                               @RequestParam("team_domain") String teamDomain,
+                                               @RequestParam("channel_id") String channelId,
+                                               @RequestParam("channel_name") String channelName,
+                                               @RequestParam("user_id") String userId,
+                                               @RequestParam("user_name") String userName,
+                                               @RequestParam("command") String command,
+                                               @RequestParam("text") String text,
+                                               @RequestParam("token") String token,
+                                               @RequestParam("response_url") String responseUrl) throws IOException, ClassNotFoundException
     {
 
         try {
