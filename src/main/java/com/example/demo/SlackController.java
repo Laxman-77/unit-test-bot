@@ -18,16 +18,7 @@ public class SlackController {
     @RequestMapping(value = "/slack",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public SlackResponse onReceiveSlashCommand(@RequestParam("team_id") String teamId,
-                                        @RequestParam("team_domain") String teamDomain,
-                                        @RequestParam("channel_id") String channelId,
-                                        @RequestParam("channel_name") String channelName,
-                                        @RequestParam("user_id") String userId,
-                                        @RequestParam("user_name") String userName,
-                                        @RequestParam("command") String command,
-                                        @RequestParam("text") String text,
-                                        @RequestParam("token") String token,
-                                        @RequestParam("response_url") String responseUrl) throws IOException, ClassNotFoundException
+    public SlackResponse onReceiveSlashCommand() throws IOException, ClassNotFoundException
     {
 
         try {
@@ -36,23 +27,13 @@ public class SlackController {
             response.setResponseType("in_channel");
 
             String mapTable = TestRunner.getAuthorMap();
-            //response.setText("```" + "Unit Testing Test Author Map\n" + mapTable + " ```");
+            response.setText("```" + "Unit Testing Test Author Map\n" + mapTable + " ```");
             System.out.println(mapTable);
 
-            StringBuilder res = new StringBuilder();
-            res.append("teamId :").append(teamId)
-                    .append("\ntoken: ").append(token)
-                    .append("\nchannel : ").append(channelName)
-                    .append("\n teamDomain: ").append(teamDomain)
-                    .append("\n channelId: ").append(channelId)
-                    .append("\n userId: ").append(userId)
-                    .append("\n userName: ").append(userName)
-                    .append("\n responseUrl: ").append(responseUrl)
-                    .append("\n command: ").append(command);
-            response.setText(res.toString());
+
             return response;
         }
-        catch(IOException e){
+        catch(Exception e){
             SlackResponse response = new SlackResponse();
             response.setResponseType("ephemeral");
             response.setText("Error occurred in execution");
