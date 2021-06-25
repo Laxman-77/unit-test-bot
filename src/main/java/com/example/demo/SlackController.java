@@ -40,8 +40,15 @@ public class SlackController {
             System.out.println(mapTable);
 
             StringBuilder res = new StringBuilder();
-            res.append("teamId :").append(teamId).append("\ntoken: ").append(token).append("channel : ")
-                    .append(channelName);
+            res.append("teamId :").append(teamId)
+                    .append("\ntoken: ").append(token)
+                    .append("\nchannel : ").append(channelName)
+                    .append("\n teamDomain: ").append(teamDomain)
+                    .append("\n channelId: ").append(channelId)
+                    .append("\n userId: ").append(userId)
+                    .append("\n userName: ").append(userName)
+                    .append("\n responseUrl: ").append(responseUrl)
+                    .append("\n command: ").append(command);
             response.setText(res.toString());
             return response;
         }
