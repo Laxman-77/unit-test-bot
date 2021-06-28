@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class SlackController {
+    private static final Set<String> allowedChannels = Set.of("unit-test-bot","paid-backend");
+    private static final Set<String> allowedDomains = Set.of("unit-test-bot","sprinklr");
     @RequestMapping(value = "/slack",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -30,6 +30,8 @@ public class SlackController {
                                                @RequestParam("response_url") String responseUrl) throws IOException, ClassNotFoundException
     {
 
+        if(!allowedDomains.contains(teamDomain)) return new SlackResponse("Your teamDomain is not authorized to use this bot.");
+        if(!allowedChannels.contains(channelName)) return new SlackResponse("This channel is not authorized to use this bot.");
         try {
             SlackResponse response = new SlackResponse();
 
