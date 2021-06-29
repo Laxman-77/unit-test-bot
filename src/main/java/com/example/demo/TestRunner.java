@@ -21,7 +21,7 @@ import java.util.Map;
         CalculatorTestSuite2.class
 })
 public class TestRunner {
-    private static final String testDir = "src/main/";
+    private static final String testDir = "demo1/src/main/";
     private static final String FILE_PREFIX = testDir+"/java/";
 
     public static HashMap<String,String> getAuthorMap() throws ClassNotFoundException, IOException {
