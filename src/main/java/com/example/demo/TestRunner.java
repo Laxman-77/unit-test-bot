@@ -24,18 +24,11 @@ public class TestRunner {
     private static final String testDir = "src/main/";
     private static final String FILE_PREFIX = testDir+"/java/";
 
-    private static final String PADDING = " ";
-    private static final String VERTICAL_SEPARATOR = "|";
-    private static final String HORIZONTAL_SEPARATOR = "-";
-    private static final String NEWLINE_SEPARATOR = "\n";
-    private static final String INTERSECTION_CHAR = "+";
-    private static HashMap<String,String> authorMap;
-
-    public static String getAuthorMap() throws ClassNotFoundException, IOException {
+    public static HashMap<String,String> getAuthorMap() throws ClassNotFoundException, IOException {
         Class currentClass = new Object(){}.getClass().getEnclosingClass(); // TestRunner.class
         //Result result = JUnitCore.runClasses(currentClass);
 
-        authorMap = new HashMap<>(); // map for @Test method() --> AuthorName
+        HashMap<String,String > authorMap = new HashMap<>(); // map for @Test method() --> AuthorName
 
         Suite.SuiteClasses testSuiteClasses = (Suite.SuiteClasses) currentClass.getAnnotation(Suite.SuiteClasses.class);
         Class<?>[] allTestSuitesClasses = testSuiteClasses.value();
@@ -71,7 +64,7 @@ public class TestRunner {
                                 if(!(authorMailString.contains("@"))) System.out.println("# Not Committed yet");
                                 String authorName = getAuthorMailFromGitBlame(authorMailString);
                                 String methodName = getMethodName(line);
-                                authorMap.put(className.getName() + ". " + methodName, authorName); // ". " added explicitly
+                                authorMap.put(className.getSimpleName() + ". " + methodName, authorName); // ". " added explicitly
 
                                 //System.out.println(authorName+"\n"+methodName);
                                 //Mapping testname (MongoPersistentPropertyCacheTest. testMongoPersistentPropertyCache_index_created)
@@ -92,13 +85,8 @@ public class TestRunner {
             }
         }
 
-        // converting authorMap to string in table format
-        List<String> list = printAuthorMap();
-        StringBuilder table = new StringBuilder();
-        for( String entry: list){
-            table.append(entry).append(NEWLINE_SEPARATOR);
-        }
-        return table.toString();
+        return authorMap;
+
     }
 
     private static String findGitBlameForLine(String fileName,int lineNumber) throws IOException {
@@ -149,58 +137,5 @@ public class TestRunner {
         return tmp[tmp.length-1]; // fun1
     }
 
-    private static List<String> printAuthorMap(){
-        int maxAuthorNameLength = 0;
-        int maxTestNameLength = 0;
-
-        for(Map.Entry entry : authorMap.entrySet()){
-            maxAuthorNameLength = Math.max(maxAuthorNameLength,entry.getValue().toString().length());
-            maxTestNameLength = Math.max(maxTestNameLength,entry.getKey().toString().length());
-        }
-
-        /*
-            Table Format:
-            +--------------------------+-------------------+
-            | Test Name                | Author Name       |
-            +--------------------------+-------------------+
-            | class1.testMethod1       | goliyalaxman00    |
-            | class1.testMethod2       | abhinav.bollam    |
-            +--------------------------+-------------------+
-         */
-
-        maxAuthorNameLength += 2; // for extra padding
-        maxTestNameLength += 2;
-        StringBuilder horizontal = new StringBuilder(); // +----------------+------------+
-        horizontal.append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxTestNameLength+1)).
-                append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxAuthorNameLength+1)).append(INTERSECTION_CHAR);
-        //System.out.println(horizontal);
-
-        String[] headings = {"Test Name", "Author Name"};
-        StringBuilder headers = getPaddedEntry(headings,maxTestNameLength,maxAuthorNameLength);
-
-        List<String> mapTable = new ArrayList<>();
-        mapTable.add(horizontal.toString());
-        mapTable.add(headers.toString());
-        mapTable.add(horizontal.toString());
-
-        for(Map.Entry entry: authorMap.entrySet()){
-            String[] entries = {entry.getKey().toString(),entry.getValue().toString()};
-            StringBuilder padded = getPaddedEntry(entries,maxTestNameLength,maxAuthorNameLength);
-            mapTable.add(padded.toString());
-        }
-
-        mapTable.add(horizontal.toString());
-
-        return mapTable;
-    }
-
-    private static StringBuilder getPaddedEntry(String[] headings,Integer maxTestNameLength,Integer maxAuthorNameLength)
-    {
-        StringBuilder heading = new StringBuilder();
-        heading.append(VERTICAL_SEPARATOR).append(PADDING).append(headings[0]).append(StringUtils.repeat(PADDING,maxTestNameLength-headings[0].length()))
-                .append(VERTICAL_SEPARATOR).append(PADDING).append(headings[1]).append(StringUtils.repeat(PADDING,maxAuthorNameLength-headings[1].length()))
-                .append(VERTICAL_SEPARATOR);
-        return heading;
-    }
 
 }
