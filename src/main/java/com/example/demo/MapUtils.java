@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mockito.internal.configuration.CaptorAnnotationProcessor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,4 +82,40 @@ public class MapUtils {
         return heading;
     }
 
+    public static List<String> getFailuresOfAuthor(HashMap<String,String> authorMap,String author){
+        List<String> list = new ArrayList<>();
+        for(Map.Entry entry : authorMap.entrySet()){
+            if(entry.getValue().toString().equals(author)){
+                list.add(entry.getKey().toString());
+            }
+        }
+        return list;
+    }
+
+    public static String getListAsTableString(List<String> list){
+        int maxTestLength = 10;// Test Name
+
+        for(String s:list) maxTestLength = Math.max(maxTestLength,s.length());
+
+        StringBuilder listTable = new StringBuilder();
+        StringBuilder horizontal = new StringBuilder();
+        horizontal.append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxTestLength+1)).append(INTERSECTION_CHAR);
+
+        listTable.append(horizontal.toString()).append(NEWLINE_SEPARATOR);
+        listTable.append(getPaddedListEntry("Test Name ",maxTestLength).toString()).append(NEWLINE_SEPARATOR);
+        listTable.append(horizontal.toString()).append(NEWLINE_SEPARATOR);
+        for(String item : list){
+            listTable.append(getPaddedListEntry(item,maxTestLength).toString()).append(NEWLINE_SEPARATOR);
+        }
+
+        listTable.append(horizontal.toString()).append(NEWLINE_SEPARATOR);
+        return listTable.toString();
+    }
+
+    private static StringBuilder getPaddedListEntry(String item, Integer maxTestLength){
+        StringBuilder entry = new StringBuilder();
+        entry.append(VERTICAL_SEPARATOR).append(PADDING).append(item).append(StringUtils.repeat(PADDING,maxTestLength - item.length()))
+                .append(VERTICAL_SEPARATOR);
+        return entry;
+    }
 }

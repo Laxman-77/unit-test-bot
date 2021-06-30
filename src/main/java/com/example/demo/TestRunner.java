@@ -93,7 +93,7 @@ public class TestRunner {
         String[] blameCmd = {
                 "/bin/sh",
                 "-c",
-                "git blame -L "+lineNumber+",+1 " +" --line-porcelain " + fileName + " | egrep \"author-mail\""
+                "git blame -L "+lineNumber+",+1 " +" --line-porcelain " + fileName + " | egrep \"author-mail\"",
         };
 
         Process pr;

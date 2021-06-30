@@ -37,4 +37,6 @@ public class CalculatorTest1 {
         assertEquals(13,calc.subtract(100,87));
     }
 
+    @Test
+    public void addtest3(){ assertEquals(200,calc.add(50,150));}
 }
