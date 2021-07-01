@@ -39,4 +39,7 @@ public class CalculatorTest1 {
 
     @Test
     public void addtest3(){ assertEquals(200,calc.add(50,150));}
+
+    @Test
+    public void subtractTest3(){ assertEquals(300,calc.subtract(1000,700));}
 }

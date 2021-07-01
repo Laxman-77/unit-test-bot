@@ -82,7 +82,7 @@ public class MapUtils {
         return heading;
     }
 
-    public static List<String> getFailuresOfAuthor(HashMap<String,String> authorMap,String author){
+    public static List<String> getAllTestsOfAuthor(HashMap<String,String> authorMap,String author){
         List<String> list = new ArrayList<>();
         for(Map.Entry entry : authorMap.entrySet()){
             if(entry.getValue().toString().equals(author)){
@@ -92,11 +92,12 @@ public class MapUtils {
         return list;
     }
 
-    public static String getListAsTableString(List<String> list){
+    public static String getListAsTableString(List<String> list,HashMap<String,String> fullClassName){
         int maxTestLength = 10;// Test Name
 
         for(String s:list) maxTestLength = Math.max(maxTestLength,s.length());
 
+        maxTestLength+=2;
         StringBuilder listTable = new StringBuilder();
         StringBuilder horizontal = new StringBuilder();
         horizontal.append(INTERSECTION_CHAR).append(StringUtils.repeat(HORIZONTAL_SEPARATOR,maxTestLength+1)).append(INTERSECTION_CHAR);
@@ -105,7 +106,7 @@ public class MapUtils {
         listTable.append(getPaddedListEntry("Test Name ",maxTestLength).toString()).append(NEWLINE_SEPARATOR);
         listTable.append(horizontal.toString()).append(NEWLINE_SEPARATOR);
         for(String item : list){
-            listTable.append(getPaddedListEntry(item,maxTestLength).toString()).append(NEWLINE_SEPARATOR);
+            listTable.append(getEmbededPaddedListEntry(item,maxTestLength,fullClassName).toString()).append(NEWLINE_SEPARATOR);
         }
 
         listTable.append(horizontal.toString()).append(NEWLINE_SEPARATOR);
@@ -115,6 +116,15 @@ public class MapUtils {
     private static StringBuilder getPaddedListEntry(String item, Integer maxTestLength){
         StringBuilder entry = new StringBuilder();
         entry.append(VERTICAL_SEPARATOR).append(PADDING).append(item).append(StringUtils.repeat(PADDING,maxTestLength - item.length()))
+                .append(VERTICAL_SEPARATOR);
+        return entry;
+    }
+
+    private static StringBuilder getEmbededPaddedListEntry(String item, Integer maxTestLength,HashMap<String,String> fullClassName){
+        StringBuilder entry = new StringBuilder();
+        String[] tmp = item.split("[.]");
+
+        entry.append(VERTICAL_SEPARATOR).append(PADDING).append("<https://google.com/"+fullClassName.get(tmp[0])+"|").append(item).append(">").append(StringUtils.repeat(PADDING,maxTestLength - item.length()))
                 .append(VERTICAL_SEPARATOR);
         return entry;
     }

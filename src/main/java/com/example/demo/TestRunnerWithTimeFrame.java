@@ -1,13 +1,18 @@
 package com.example.demo;
 
+import org.joda.time.DateTime;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.apache.commons.lang3.StringUtils;
 import java.io.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -20,12 +25,53 @@ import java.util.Map;
         CalculatorTestSuite1.class,
         CalculatorTestSuite2.class
 })
-public class TestRunner {
+public class TestRunnerWithTimeFrame {
     private static final String testDir = "src/main/";
     private static final String FILE_PREFIX = testDir+"/java/";
     private static HashMap<String, String> fullClassName = new HashMap<>();
+
+    public static long startTime, endTime;
+    public static void timeFrameSetup(String timeFrame) {
+        switch (timeFrame) {
+            case "LastWeek": {
+                LocalDate localDate = LocalDate.now();
+                LocalDateTime time =
+                        localDate.atStartOfDay().with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)).with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
+                startTime = time.toEpochSecond(ZoneOffset.UTC);
+
+                localDate = LocalDate.now();
+                time = localDate.atStartOfDay().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                endTime = time.toEpochSecond(ZoneOffset.UTC);
+                break;
+            }
+            case "ThisWeek": {
+                LocalDate localDate = LocalDate.now();
+                LocalDateTime time = localDate.atStartOfDay().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                startTime = time.toEpochSecond(ZoneOffset.UTC);
+
+                endTime = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+                break;
+            }
+            case "LastSevenDays":
+                startTime = new DateTime().withTimeAtStartOfDay().minusDays(6).getMillis() / 1000;
+                endTime = new DateTime().getMillis() / 1000;
+                break;
+            case "ThisMonth": {
+                LocalDate localDate = LocalDate.now();
+                LocalDateTime time = localDate.atStartOfDay().with(TemporalAdjusters.firstDayOfMonth());
+                startTime = time.toEpochSecond(ZoneOffset.UTC);
+
+                endTime = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+                break;
+            }
+
+            default:
+                return;
+        }
+    }
+
     public static HashMap<String,String> getAuthorMap() throws ClassNotFoundException, IOException {
-        Class currentClass = new Object(){}.getClass().getEnclosingClass(); // TestRunner.class
+        Class currentClass = new Object(){}.getClass().getEnclosingClass(); // TestRunnerWithTimeFrame.class
         //Result result = JUnitCore.runClasses(currentClass);
 
         HashMap<String,String > authorMap = new HashMap<>(); // map for @Test method() --> AuthorName
@@ -53,17 +99,23 @@ public class TestRunner {
                     BufferedReader buf = new BufferedReader(new FileReader(fileName));
                     LineNumberReader rdr = new LineNumberReader(buf);
 
-
+                    long fileTimeStamp = getFileTimeStamp(fileName);
+                    if( fileTimeStamp < startTime) continue;
                     try {
                         String line;
                         while ((line = rdr.readLine()) != null) {
 
                             if (line.contains("@Test")) {
                                 line = rdr.readLine(); // this line contains the method name
-                                String authorMailString = findGitBlameForLine(fileName, rdr.getLineNumber());
+                                String gitBlameForLine = findGitBlameForLine(fileName, rdr.getLineNumber());
 
-                                if(!(authorMailString.contains("@"))) System.out.println("# Not Committed yet");
-                                String authorName = getAuthorMailFromGitBlame(authorMailString);
+                                if(gitBlameForLine.split(" ").length<=1) continue;
+                                String authorMailString = gitBlameForLine.split(" ")[0];
+                                long lastCommitTime = Integer.parseInt(gitBlameForLine.split(" ")[1]);
+
+                                if(lastCommitTime < startTime || lastCommitTime > endTime) continue;
+                                //if(!(authorMailString.contains("@"))) System.out.println("# Not Committed yet");
+                                String authorName = authorMailString;//getAuthorMailFromGitBlame(authorMailString);
                                 String methodName = getMethodName(line);
                                 authorMap.put(className.getSimpleName() + ". " + methodName, authorName); // ". " added explicitly
 
@@ -98,20 +150,58 @@ public class TestRunner {
 
     /******************************   PRIVATE METHODS       ******************************/
 
+    private static long getFileTimeStamp(String fileName){
+        long fileTimeStamp = 0;
+        Process pr;
+        try {
+            // File last commit check for early abort
+            String[] logCmd = {
+                    "/bin/sh",
+                    "-c",
+                    "git log -1 --format=%ct " + fileName
+            };
+            pr = Runtime.getRuntime().exec(logCmd);
+
+            InputStream is = pr.getInputStream();
+            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+
+            try {
+                fileTimeStamp = Integer.parseInt(buf.readLine());
+
+            } finally {
+                is.close();
+                buf.close();
+            }
+
+            //pr.waitFor(5, TimeUnit.SECONDS);
+        } catch (Throwable throwable) {
+            System.out.println("Exception while running git log for " + fileName);
+            throwable.printStackTrace();
+        }
+        return fileTimeStamp;
+    }
+
     private static String findGitBlameForLine(String fileName,int lineNumber) throws IOException {
         String[] blameCmd = {
                 "/bin/sh",
                 "-c",
-                "git blame -L "+lineNumber+",+1 " +" --line-porcelain " + fileName + " | egrep \"author-mail\"",
+                "git blame -L "+lineNumber+",+1 " +" --line-porcelain " + fileName + " | egrep \"author-mail|committer-time\"",
         };
+
 
         Process pr;
         String line = null;
+        String ret = "";
         try {
             pr = Runtime.getRuntime().exec(blameCmd);
             BufferedReader buf  = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 
             while((line = buf.readLine())!=null){  // reading the result of git blame command
+                String commit = buf.readLine();
+                if(commit == null) return "NIL";
+                String authorMail = getAuthorMailFromGitBlame(line);
+                long committerTime = Integer.parseInt(commit.split(" ")[1]);
+                ret+=authorMail+" "+committerTime;
                 break;
             }
             buf.close();
@@ -119,7 +209,9 @@ public class TestRunner {
         catch (IOException e){
             e.printStackTrace();
         }
-        if(line == null) line = "No_Line_Readed"; // if no line readed from git blame,then line == null
+
+        if(line == null) line = "NIL"; // if no line readed from git blame,then line == null
+        else line = ret;
         return line;
     }
 
