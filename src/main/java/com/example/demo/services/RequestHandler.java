@@ -1,5 +1,9 @@
-package com.example.demo;
+package com.example.demo.services;
 
+
+import com.example.demo.components.SlackResponse;
+import com.example.demo.test.TestRunner;
+import com.example.demo.test.TestRunnerWithTimeFrame;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -85,7 +89,8 @@ public class RequestHandler {
         List<String> testsByAuthor = MapUtils.getAllTestsOfAuthor(authorMap,author);
         String embededListTable = MapUtils.getListAsTableString(testsByAuthor,fullClassName);
 
-        response.setText("```Tests added by "+author+" in "+timeFrame +" :\n" + embededListTable+"```");
+        System.out.println(embededListTable);
+        response.setText("```Tests added by "+author+" in "+timeFrame +" : "+testsByAuthor.size()+"\nHere are all the tests: \n" + embededListTable+"\nHere are the failed tests:\n"+"```");
         return response;
     }
 }

@@ -1,6 +1,5 @@
-package com.example.demo;
+package com.example.demo.services;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -9,6 +8,6 @@ import org.junit.runners.Suite;
         CalculatorTest1.class,
         CalculatorTest2.class
 })
-public class CalculatorTestSuite2 {
-}
+public class CalculatorTestSuite1 {
 
+}

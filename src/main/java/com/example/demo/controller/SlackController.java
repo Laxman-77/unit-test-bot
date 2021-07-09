@@ -1,15 +1,15 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 
+import com.example.demo.services.RequestHandler;
+import com.example.demo.components.SlackResponse;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 
 @RestController
@@ -21,15 +21,15 @@ public class SlackController {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public SlackResponse onReceiveGetAllFailures(@RequestParam("team_id") String teamId,
-                                               @RequestParam("team_domain") String teamDomain,
-                                               @RequestParam("channel_id") String channelId,
-                                               @RequestParam("channel_name") String channelName,
-                                               @RequestParam("user_id") String userId,
-                                               @RequestParam("user_name") String userName,
-                                               @RequestParam("command") String command,
-                                               @RequestParam("text") String text,
-                                               @RequestParam("token") String token,
-                                               @RequestParam("response_url") String responseUrl) throws IOException, ClassNotFoundException
+                                                 @RequestParam("team_domain") String teamDomain,
+                                                 @RequestParam("channel_id") String channelId,
+                                                 @RequestParam("channel_name") String channelName,
+                                                 @RequestParam("user_id") String userId,
+                                                 @RequestParam("user_name") String userName,
+                                                 @RequestParam("command") String command,
+                                                 @RequestParam("text") String text,
+                                                 @RequestParam("token") String token,
+                                                 @RequestParam("response_url") String responseUrl) throws IOException, ClassNotFoundException
     {
 
         if(!allowedDomains.contains(teamDomain)) return new SlackResponse("Your teamDomain is not authorized to use this bot.");
@@ -95,6 +95,7 @@ public class SlackController {
                                                       @RequestParam("response_url") String responseUrl) throws IOException, ClassNotFoundException
     {
 
+        System.out.println(command + " " + text);
         if(!allowedDomains.contains(teamDomain)) return new SlackResponse("Your teamDomain is not authorized to use this bot.");
         if(!allowedChannels.contains(channelName)) return new SlackResponse("This channel is not authorized to use this bot.");
         try {
